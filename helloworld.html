@@ -29,6 +29,14 @@ $(document).ready(function(){
     $("#text-input").val("");
   });
 
+
+  $('#text-input').keypress(function(e){
+      if(e.which == 13){
+         now.distributeMessage($("#text-input").val());
+         $("#text-input").val("");
+       }
+   });
+
 });
 </script>
 </head>
