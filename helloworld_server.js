@@ -6,7 +6,7 @@ var server = require('http').createServer(function(req, response){
     response.end();
   });
 });
-server.listen(8081);
+server.listen(80);
 var everyone = require("now").initialize(server);
 
 
