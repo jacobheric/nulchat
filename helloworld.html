@@ -21,10 +21,45 @@
 <script src="/nowjs/now.js"></script>
 
 <script>
+
+    function RequestPermission (callback)
+    {
+	if (!window.webkitNotifications) {
+        	alert('Sorry, your browser does not support desktop notifications. Try Google Chrome.');
+		return;
+    	}
+
+	if ($('#notify').attr('checked') && window.webkitNotifications.checkPermission() > 0) {
+        	 window.webkitNotifications.requestPermission();
+	}   
+    }
+
+    function notify (chatMessage)
+    {       
+        if (window.webkitNotifications.checkPermission() == 0) {
+                var icon  = '';
+                var title = 'nulchat';
+                var body   =  chatMessage;
+ 
+        
+                var popup = window.webkitNotifications.createNotification(icon, title, body);
+                popup.show();
+                setTimeout(function(){
+                popup.cancel();
+                }, '4000');
+
+	}
+    }
+
 $(document).ready(function(){
   now.name = prompt("What's your name?", "");
+  var myName = now.name;
   now.receiveMessage = function(name, message){
     $("#messages").append("<br>" + name + ": " + message);
+
+	if ($('#notify').attr('checked') && myName != name && window.webkitNotifications) {
+     		notify(name + " says:" + message.substring(0,50));
+	}	
   }
 
   $("#send-button").click(function(){
@@ -46,9 +81,9 @@ $(document).ready(function(){
 
 <body>
 <div id="messages"></div>
-<input type="text" id="text-input">
-<input type="button" value="Send" id="send-button">
-
+<input type="text" id="text-input"/>
+<input type="button" value="Send" id="send-button" /> <br/>
+<input type="checkbox" id="notify" onclick="RequestPermission()" /> notify me (chrome only)
 <br/>  
 <br/>
 I've checked this example source into here...tweak it and I'll redeploy:
